@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
   const dropdownOptions = {
     courses: ["SCY", "LCM"],
     events: {
-      // keep values course-free; we'll append course when matching JSON
       SCY: {
         "50 Free": "50 FR",
         "100 Free": "100 FR",
@@ -39,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "50 Free": "50 FR",
         "100 Free": "100 FR",
         "200 Free": "200 FR",
-        "400 Free": "400 FR", // may yield 0 in LCM; remove if you prefer
+        "400 Free": "400 FR",
         "800 Free": "800 FR",
         "1500 Free": "1500 FR",
         "50 Back": "50 BA",
