@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "50 Free": "50 FR",
         "100 Free": "100 FR",
         "200 Free": "200 FR",
-        "500 Free": "500 FR", // may yield 0 in LCM; remove if you prefer
+        "400 Free": "400 FR", // may yield 0 in LCM; remove if you prefer
         "800 Free": "800 FR",
         "1500 Free": "1500 FR",
         "50 Back": "50 BA",
