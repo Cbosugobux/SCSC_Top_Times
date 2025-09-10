@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
             age_group_desc: ageGroupSelect.value
         };
 
-        const jsonFile = "Data/South Carolina Swim Club 10 Top Times.json";
+        const jsonFile = "Data/SCSCTop10";
 
         d3.json(jsonFile).then(data => {
             const results = data.Table2.Detail_Collection.filter(d =>
