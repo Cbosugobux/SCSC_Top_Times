@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
             age_group_desc: ageGroupSelect.value
         };
 
-        const jsonFile = payload.course === "SCY" ? "South Carolina Swim Club 10 Top Times.json";
+        const jsonFile = "South Carolina Swim Club 10 Top Times.json";
 
         d3.json(jsonFile).then(data => {
             const results = data.Table2.Detail_Collection
