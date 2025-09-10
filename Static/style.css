@@ -19,7 +19,7 @@ main.content {
 /* General Page Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(to bottom, ##FFA500, #000000);
+    background: linear-gradient(to bottom, #FFA500, #000000);
     color: white;
     margin: 0;
     padding: 0;
