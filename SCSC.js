@@ -111,20 +111,21 @@ document.addEventListener('DOMContentLoaded', function () {
         const jsonFile = "South Carolina Swim Club 10 Top Times.json";
 
         d3.json(jsonFile).then(data => {
-            const results = data.Table2.Detail_Collection
-                .filter(d =>
-                    d["Event Code"] === payload.event_code &&
-                    d["Type Code"] === payload.type_code &&
-                    d["Age Group Desc"] === payload.age_group_desc
-                )
-                .sort((a, b) => a["Top Time"] - b["Top Time"])
-                .slice(0, 10)
-                .map(row => ({
-                    rank: row["Top Time"],
-                    name: `${row["First Name"]} ${row["Last Name"]}`,
-                    swim_time: row["Swim Time"],
-                    date: row["TextBox59"]
-                }));
+            const results = data.Table2.Detail_Collection.filter(d =>
+            d["Course"] === payload.course &&
+            d["Event Code"] === payload.event_code &&
+            d["Type Code"] === payload.type_code &&
+            d["Age Group Desc"] === payload.age_group_desc
+              )
+            .sort((a, b) => a["Top Time"] - b["Top Time"])
+            .slice(0, 10)
+            .map((row, index) => ({
+            rank: index + 1,
+            name: `${row["First Name"]} ${row["Last Name"]}`,
+            swim_time: row["Swim Time"],
+            date: row["TextBox59"]
+        }));
+
 
             if (results.length === 0) {
                 resultsTable.innerHTML = `<tr><td colspan="4">No results found</td></tr>`;
