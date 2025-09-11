@@ -1,3 +1,4 @@
+<script>
 document.addEventListener('DOMContentLoaded', function () {
   const courseSelect = document.getElementById('course');
   const eventSelect = document.getElementById('event');
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "500 Free": "500 FR",
         "1000 Free": "1000 FR",
         "1650 Free": "1650 FR",
-        "50 Back": "50 BA",
+        "50 Back": "50 BK",
         "100 Back": "100 BK",
         "200 Back": "200 BK",
         "50 Breast": "50 BR",
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "400 Free": "400 FR",
         "800 Free": "800 FR",
         "1500 Free": "1500 FR",
-        "50 Back": "50 BA",
+        "50 Back": "50 BK",
         "100 Back": "100 BK",
         "200 Back": "200 BK",
         "50 Breast": "50 BR",
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     "Age Groups": {
       "8 & Under": "8 & Under",
       "9-10": "9-10",
-      "10 & Under":"10 & Under"
+      "10 & Under": "10 & Under",
       "11-12": "11-12",
       "13-14": "13-14",
       "15-16": "15-16",
@@ -74,9 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // Populate dropdowns
-  dropdownOptions.courses.forEach(c => {
-    courseSelect.innerHTML += `<option value="${c}">${c}</option>`;
-  });
+  courseSelect.innerHTML = dropdownOptions.courses.map(c => `<option value="${c}">${c}</option>`).join('');
   for (const [k, v] of Object.entries(dropdownOptions.genders)) {
     genderSelect.innerHTML += `<option value="${v}">${k}</option>`;
   }
@@ -87,10 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const refreshEvents = () => {
     const selectedCourse = courseSelect.value;
     const events = dropdownOptions.events[selectedCourse] || {};
-    eventSelect.innerHTML = '';
-    for (const [label, code] of Object.entries(events)) {
-      eventSelect.innerHTML += `<option value="${code}">${label}</option>`;
-    }
+    eventSelect.innerHTML = Object.entries(events)
+      .map(([label, code]) => `<option value="${code}">${label}</option>`)
+      .join('');
   };
   courseSelect.addEventListener('change', refreshEvents);
   courseSelect.dispatchEvent(new Event('change'));
@@ -107,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return Number.isNaN(num) ? Number.POSITIVE_INFINITY : num;
   };
 
-  // >>> Use the file you just shared <<<
+  // Path to your data
   const jsonFile = "Static/SCSCTop10_with_course.json";
 
   form.addEventListener('submit', function (e) {
@@ -123,7 +121,6 @@ document.addEventListener('DOMContentLoaded', function () {
     d3.json(jsonFile).then(data => {
       const rows = (data?.Table2?.Detail_Collection || []).map(r => {
         const obj = { ...r };
-        // normalize/trim fields used for filtering
         obj.course = trimStr(obj.course);
         obj.Event = trimStr(obj.Event);
         obj["Competition Category"] = trimStr(obj["Competition Category"]);
@@ -133,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return obj;
       });
 
-      // Event can be stored as "50 FR" or "50 FR SCY". Match both.
+      // Allow matches like "50 FR" or "50 FR SCY"
       const eventWithCourse = `${payload.event_code} ${payload.course}`;
       const filtered = rows
         .filter(d =>
@@ -166,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
       `).join('');
 
       setTimeout(() => {
-        Array.from(resultsTable.children).forEach(tr => tr.classList.add('show'));
+        Array.from(resultsTable.querySelectorAll('tr')).forEach(tr => tr.classList.add('show'));
       }, 50);
     }).catch(err => {
       console.error("Failed to load JSON:", err);
@@ -174,3 +171,4 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+</script>
