@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     genders: { "Male": "M", "Female": "F" },
     "Age Groups": {
-      "8 & Under": "8 & Under,
+      "8 & Under": "8 & Under",
       "9-10": "9-10",
       "11-12": "11-12",
       "13-14": "13-14",
