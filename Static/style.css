@@ -201,3 +201,97 @@ table tbody tr.show {
         padding: 8px;
     }
 }
+
+/* ===== Mobile & Tablet Enhancements (non-destructive) ===== */
+
+/* Layout: make the form a responsive grid */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1024px) { .form-row { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 720px)  { .form-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .form-row { grid-template-columns: 1fr; } }
+
+.form-group select,
+.form-group button {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+}
+
+/* Make logo and wrapper friendly */
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px;
+}
+.header img {
+  max-width: 140px;
+  height: auto;
+}
+@media (max-width: 560px) {
+  .header { text-align: center; }
+  .header img { max-width: 120px; }
+}
+
+/* Table: allow horizontal scroll on tablets */
+.content {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Nice defaults */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px; /* keeps columns readable on narrow screens (scrolls) */
+}
+thead th, tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+/* Animate rows on insert (optional) */
+#results-table tr {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: .22s ease;
+}
+#results-table tr.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Turn the table into “cards” on phones */
+@media (max-width: 560px) {
+  thead { display: none; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  table { min-width: 0; }
+  #results-table tr {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.08);
+    margin: 10px 6px 14px;
+    padding: 6px 8px;
+    border: none;
+  }
+  #results-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border: none;
+    padding: 10px 6px;
+  }
+  #results-table td::before {
+    content: attr(data-label);
+    color: #666;
+    margin-right: 10px;
+    min-width: 90px;
+    font-size: .92rem;
+  }
+}
