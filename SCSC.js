@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "500 Free": "500 FR",
         "1000 Free": "1000 FR",
         "1650 Free": "1650 FR",
-        "50 Back": "50 BA",
+        "50 Back": "50 BK",
         "100 Back": "100 BK",
         "200 Back": "200 BK",
         "50 Breast": "50 BR",
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "500 Free": "500 FR", // ok if empty in LCM
         "800 Free": "800 FR",
         "1500 Free": "1500 FR",
-        "50 Back": "50 BA",
+        "50 Back": "50 BK",
         "100 Back": "100 BK",
         "200 Back": "200 BK",
         "50 Breast": "50 BR",
