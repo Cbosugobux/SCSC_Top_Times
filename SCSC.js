@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "50 Free": "50 FR",
         "100 Free": "100 FR",
         "200 Free": "200 FR",
-        "500 Free": "500 FR", // ok if empty in LCM
+        "400 Free": "400 FR", // ok if empty in LCM
         "800 Free": "800 FR",
         "1500 Free": "1500 FR",
         "50 Back": "50 BK",
