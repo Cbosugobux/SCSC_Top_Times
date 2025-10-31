@@ -1,4 +1,3 @@
-<script>
 document.addEventListener('DOMContentLoaded', function () {
   const $ = (id) => document.getElementById(id);
   const courseSelect = $('course');
@@ -214,4 +213,4 @@ document.addEventListener('DOMContentLoaded', function () {
     renderRows(filtered);
   });
 });
-</script>
+
