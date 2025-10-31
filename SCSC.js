@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const resultsTable = $('results-table');
 
   if (!courseSelect || !eventSelect || !genderSelect || !ageGroupSelect || !form || !resultsTable) {
-    console.error('❌ One or more required elements are missing. Check element IDs.');
+    console.error('❌ Missing DOM elements. Check element IDs in the HTML.');
     return;
   }
 
@@ -70,14 +70,14 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // ---------------------------
-  // Load JSON
+  // Data (NOTE: path and case must match your server)
   // ---------------------------
   const JSON_PATH = 'Static/SCSCTop10_with_course.json';
 
   const loadJSON = (url) => {
     if (window.d3 && typeof d3.json === 'function') return d3.json(url);
     return fetch(url, { cache: 'no-store' }).then(r => {
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      if (!r.ok) throw new Error(`HTTP ${r.status} while fetching ${url}`);
       return r.json();
     });
   };
@@ -86,6 +86,16 @@ document.addEventListener('DOMContentLoaded', function () {
   // Build dynamic dropdowns from JSON
   // ---------------------------
   let allRows = [];
+  let eventMap = { SCY: new Set(), LCM: new Set() };
+  let ageGroups = new Set();
+
+  const refreshEventsFromMap = () => {
+    const selectedCourse = courseSelect.value;
+    const events = Array.from(eventMap[selectedCourse] || []).sort();
+    const prev = eventSelect.value;
+    eventSelect.innerHTML = events.map(e => `<option value="${e}">${e}</option>`).join('');
+    if (prev && events.includes(prev)) eventSelect.value = prev;
+  };
 
   loadJSON(JSON_PATH).then(data => {
     const rows = (data?.Table2?.Detail_Collection || []).map(r => {
@@ -99,38 +109,48 @@ document.addEventListener('DOMContentLoaded', function () {
       obj.Last = trimStr(obj.Last);
       return obj;
     });
+
+    if (!rows.length) {
+      console.error('⚠️ JSON loaded but contains 0 rows at Table2.Detail_Collection.');
+      setStatusRow('No data available');
+      return;
+    }
+
     allRows = rows;
 
     // Derive unique events and age groups
-    const eventMap = { SCY: new Set(), LCM: new Set() };
-    const ageGroups = new Set();
-
     rows.forEach(r => {
       const { base, course } = parseEvent(r.Event);
       if (course && eventMap[course]) eventMap[course].add(base);
       if (r["Age Group"]) ageGroups.add(r["Age Group"]);
     });
 
-    // Populate Age Group dropdown
+    // Populate Age Group dropdown once
     ageGroupSelect.innerHTML = Array.from(ageGroups)
       .sort((a,b) => String(a).localeCompare(String(b)))
       .map(v => `<option value="${v}">${v}</option>`).join('');
 
-    // Populate events dynamically when course changes
-    const refreshEvents = () => {
-      const selectedCourse = courseSelect.value;
-      const events = Array.from(eventMap[selectedCourse] || []).sort();
-      const prev = eventSelect.value;
-      eventSelect.innerHTML = events.map(e => `<option value="${e}">${e}</option>`).join('');
-      if (prev && events.includes(prev)) eventSelect.value = prev;
-    };
+    // Populate events based on the default course
+    refreshEventsFromMap();
 
-    courseSelect.addEventListener('change', refreshEvents);
-    refreshEvents(); // initial populate
+    // Optional: auto-submit once loaded so you see immediate results
+    if (eventSelect.value && genderSelect.value && ageGroupSelect.value) {
+      form.requestSubmit();
+    } else {
+      console.warn('⚠️ Some selects are empty after JSON load:', {
+        course: courseSelect.value,
+        eventCount: eventSelect.options.length,
+        gender: genderSelect.value,
+        ageGroupCount: ageGroupSelect.options.length
+      });
+    }
   }).catch(err => {
-    console.error('Failed to load JSON:', err);
+    console.error('❌ Failed to load JSON:', err);
     setStatusRow('Error loading data');
   });
+
+  // When course changes, rebuild events list from the precomputed map
+  courseSelect.addEventListener('change', refreshEventsFromMap);
 
   // ---------------------------
   // Submit
@@ -139,6 +159,12 @@ document.addEventListener('DOMContentLoaded', function () {
     e.preventDefault();
     setStatusRow('Loading…');
 
+    if (!allRows.length) {
+      console.warn('⚠️ Submit clicked before data loaded.');
+      setStatusRow('Data not loaded yet');
+      return;
+    }
+
     const payload = {
       course: trimStr(courseSelect.value),
       event_code: trimStr(eventSelect.value),
@@ -146,10 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
       age_group_desc: trimStr(ageGroupSelect.value)
     };
 
-    if (!allRows.length) {
-      setStatusRow('Data not loaded yet');
-      return;
-    }
+    console.log('ℹ️ Filtering with payload:', payload);
 
     const filtered = allRows
       .filter(d => {
@@ -167,6 +190,26 @@ document.addEventListener('DOMContentLoaded', function () {
         swim_time: row.Time,
         date: row["Swim Date"]
       }));
+
+    if (!filtered.length) {
+      console.warn('⚠️ No matches. Here are some quick diagnostics:');
+      // Show a couple of available options for current course/event/age/gender
+      const sampleForCourse = allRows.filter(r => parseEvent(r.Event).course === payload.course);
+      console.warn('course sample count:', sampleForCourse.length);
+
+      const sampleForEvent = sampleForCourse.filter(r => parseEvent(r.Event).base === payload.event_code);
+      console.warn('event sample count (within course):', sampleForEvent.length);
+
+      const sampleForGender = sampleForEvent.filter(r => r["Competition Category"] === payload.type_code);
+      console.warn('gender sample count (within event):', sampleForGender.length);
+
+      const sampleForAge = sampleForGender.filter(r => r["Age Group"] === payload.age_group_desc);
+      console.warn('age-group sample count (final):', sampleForAge.length);
+
+      setStatusRow('No results found');
+    } else {
+      console.log(`✅ Found ${filtered.length} rows`);
+    }
 
     renderRows(filtered);
   });
