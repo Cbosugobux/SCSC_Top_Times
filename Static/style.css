@@ -247,3 +247,17 @@ footer {
   font-size: 0.9rem;
   background: rgba(0, 0, 0, 0.25);
 }
+/* Center filter controls as a group */
+.form-row {
+  display: flex;
+  justify-content: center;   /* center as a block */
+  align-items: flex-end;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Prevent controls from stretching too wide */
+.form-group {
+  min-width: 160px;
+  max-width: 200px;
+}
