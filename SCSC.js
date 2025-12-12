@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ---- CONFIG ----
-  const JSON_PATH = "Static/SCSCTop10_with_course.json"; // update if needed
+  const JSON_PATH = "Static/Club Top Times Report (1).json"; // update if needed
   const COURSES = ["SCY", "LCM"];
   const GENDERS = { Male: "M", Female: "F" };
 
