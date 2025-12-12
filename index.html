@@ -1,64 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Swim Top Times</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- D3.js -->
+  <!-- Mobile/tablet friendly rendering -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- D3.js (optional, your JS falls back to fetch if D3 isn’t available) -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="Static/style.css">
+  <link rel="stylesheet" href="Static/style.css" />
 </head>
+
 <body>
   <div class="wrapper">
-    <div class="header">
-      <img src="Static/SCSC_LOGO.png" alt="SCSC_Logo">
+    <header class="header">
+      <img src="Static/SCSC_LOGO.png" alt="SCSC Logo" />
       <h1>SCSC ALL TIME TOP 10 TIMES</h1>
-    </div>
+    </header>
 
+    <!-- Page layout flex container -->
     <main class="content">
-      <form id="filter-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="course">Course:</label>
-            <select id="course" name="course"></select>
-          </div>
+      <!-- New: inner wrapper to avoid .content flex/overflow conflicts -->
+      <div class="content-inner">
+        <form id="filter-form" autocomplete="off">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="course">Course:</label>
+              <select id="course" name="course"></select>
+            </div>
 
-          <div class="form-group">
-            <label for="event">Event:</label>
-            <select id="event" name="event"></select>
-          </div>
+            <div class="form-group">
+              <label for="event">Event:</label>
+              <select id="event" name="event"></select>
+            </div>
 
-          <div class="form-group">
-            <label for="gender">Gender:</label>
-            <select id="gender" name="gender"></select>
-          </div>
+            <div class="form-group">
+              <label for="gender">Gender:</label>
+              <select id="gender" name="gender"></select>
+            </div>
 
-          <div class="form-group">
-            <label for="age_group_desc">Age Group:</label>
-            <select id="age_group_desc" name="age_group_desc"></select>
-          </div>
+            <div class="form-group">
+              <label for="age_group_desc">Age Group:</label>
+              <select id="age_group_desc" name="age_group_desc"></select>
+            </div>
 
-          <div class="form-group">
-            <button type="submit">Get Results</button>
+            <div class="form-group">
+              <button type="submit">Get Results</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
 
-      <h2>Results</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Swim Time</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody id="results-table"></tbody>
-      </table>
+        <h2>Results</h2>
+
+        <table aria-label="Top 10 Swim Times">
+          <thead>
+            <tr>
+              <th scope="col">Rank</th>
+              <th scope="col">Name</th>
+              <th scope="col">Swim Time</th>
+              <th scope="col">Date</th>
+            </tr>
+          </thead>
+          <!-- IMPORTANT: JS expects results-table to be the TBODY -->
+          <tbody id="results-table"></tbody>
+        </table>
+
+        <noscript>
+          <p style="text-align:center; padding: 12px; color:#fff;">
+            This page requires JavaScript enabled to display results.
+          </p>
+        </noscript>
+      </div>
     </main>
 
     <footer>
@@ -67,6 +82,7 @@
   </div>
 
   <!-- App Logic -->
-  <script src="working.js"></script>
+  <!-- If you saved the “cleaned” JS as working.js, put it in Static/ and use this path -->
+  <script src="Static/working.js" defer></script>
 </body>
 </html>
